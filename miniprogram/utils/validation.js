@@ -12,6 +12,7 @@ function maskNickname(name) {
 }
 
 function validateTripDraft(draft) {
+  draft = draft || {};
   const errors = [];
   const from = normalizeLocation(draft.from);
   const to = normalizeLocation(draft.to);

@@ -14,6 +14,17 @@ const validDraft = {
   contactValue: '123456789'
 };
 
+function expectMissingDraftErrors(result) {
+  expect(result.ok).toBe(false);
+  expect(result.errors).toContain('出发地不能为空');
+  expect(result.errors).toContain('到达地不能为空');
+  expect(result.errors).toContain('最早出发时间无效');
+  expect(result.errors).toContain('最晚出发时间无效');
+  expect(result.errors).toContain('同行人数必须是1到6之间的整数');
+  expect(result.errors).toContain('联系方式类型必须是QQ、微信或手机号');
+  expect(result.errors).toContain('联系方式不能为空');
+}
+
 describe('trip validation', () => {
   it('normalizes location alias', () => {
     expect(normalizeLocation(' 西北工业大学长安校区 ')).toBe('长安校区');
@@ -71,6 +82,22 @@ describe('trip validation', () => {
     const result = validateTripDraft({ ...validDraft, latestTime: 'not-a-time' });
     expect(result.ok).toBe(false);
     expect(result.errors).toContain('最晚出发时间无效');
+  });
+
+  it('rejects undefined draft without throwing', () => {
+    let result;
+    expect(() => {
+      result = validateTripDraft(undefined);
+    }).not.toThrow();
+    expectMissingDraftErrors(result);
+  });
+
+  it('rejects null draft without throwing', () => {
+    let result;
+    expect(() => {
+      result = validateTripDraft(null);
+    }).not.toThrow();
+    expectMissingDraftErrors(result);
   });
 
   it('masks Chinese real name', () => {
