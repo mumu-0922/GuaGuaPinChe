@@ -7,7 +7,7 @@
     "pages/report/report"
   ],
   "window": {
-    "navigationBarTitleText": "????",
+    "navigationBarTitleText": "瓜瓜拼车",
     "navigationBarBackgroundColor": "#004EA2",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#F4F7FB"
@@ -17,9 +17,9 @@
     "selectedColor": "#004EA2",
     "backgroundColor": "#FFFFFF",
     "list": [
-      { "pagePath": "pages/index/index", "text": "??" },
-      { "pagePath": "pages/publish/publish", "text": "??" },
-      { "pagePath": "pages/mine/mine", "text": "??" }
+      { "pagePath": "pages/index/index", "text": "广场" },
+      { "pagePath": "pages/publish/publish", "text": "发布" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
     ]
   }
 }
