@@ -16,7 +16,7 @@ function validateTripDraft(draft) {
   const from = normalizeLocation(draft.from);
   const to = normalizeLocation(draft.to);
   const earliestTime = Number(draft.earliestTime);
-  const latestTime = Number(draft.latestTime || draft.earliestTime);
+  const latestTime = Number(draft.latestTime);
   const peopleCount = Number(draft.peopleCount);
   const note = String(draft.note || '').trim();
   const contactType = String(draft.contactType || '').trim();

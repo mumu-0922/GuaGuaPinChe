@@ -36,6 +36,19 @@ describe('trip validation', () => {
     expect(result.errors).toContain('最早和最晚出发时间跨度不能超过24小时');
   });
 
+  it('rejects missing latest time', () => {
+    const { latestTime, ...draftWithoutLatestTime } = validDraft;
+    const result = validateTripDraft(draftWithoutLatestTime);
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain('最晚出发时间无效');
+  });
+
+  it('rejects zero latest time', () => {
+    const result = validateTripDraft({ ...validDraft, latestTime: 0 });
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain('最晚出发时间无效');
+  });
+
   it('masks Chinese real name', () => {
     expect(maskNickname('张三')).toBe('张*');
   });
