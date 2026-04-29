@@ -1,0 +1,12 @@
+{
+  "name": "guagua-carpool",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "check:json": "node -e \"for (const f of ['project.config.json','miniprogram/app.json','miniprogram/sitemap.json','database/indexes.json']) JSON.parse(require('fs').readFileSync(f,'utf8')); console.log('json ok')\""
+  },
+  "devDependencies": {
+    "vitest": "latest"
+  }
+}

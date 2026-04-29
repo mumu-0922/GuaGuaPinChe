@@ -1,0 +1,19 @@
+page {
+  min-height: 100vh;
+  background: #f4f7fb;
+  color: #0f172a;
+  font-size: 28rpx;
+}
+.safe-area { padding: 24rpx; }
+.primary-button {
+  border-radius: 999rpx;
+  background: #004ea2;
+  color: #fff;
+  font-weight: 700;
+}
+.secondary-button {
+  border-radius: 999rpx;
+  background: #e8f1ff;
+  color: #004ea2;
+  font-weight: 700;
+}

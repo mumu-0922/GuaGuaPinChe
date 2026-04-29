@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/publish/publish",
+    "pages/detail/detail",
+    "pages/mine/mine",
+    "pages/report/report"
+  ],
+  "window": {
+    "navigationBarTitleText": "????",
+    "navigationBarBackgroundColor": "#004EA2",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F4F7FB"
+  },
+  "tabBar": {
+    "color": "#64748B",
+    "selectedColor": "#004EA2",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "??" },
+      { "pagePath": "pages/publish/publish", "text": "??" },
+      { "pagePath": "pages/mine/mine", "text": "??" }
+    ]
+  }
+}
