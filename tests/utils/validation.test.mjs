@@ -49,6 +49,30 @@ describe('trip validation', () => {
     expect(result.errors).toContain('最晚出发时间无效');
   });
 
+  it('rejects null latest time', () => {
+    const result = validateTripDraft({ ...validDraft, latestTime: null });
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain('最晚出发时间无效');
+  });
+
+  it('rejects empty string latest time', () => {
+    const result = validateTripDraft({ ...validDraft, latestTime: '' });
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain('最晚出发时间无效');
+  });
+
+  it('rejects negative latest time', () => {
+    const result = validateTripDraft({ ...validDraft, latestTime: -1 });
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain('最晚出发时间无效');
+  });
+
+  it('rejects non-numeric latest time', () => {
+    const result = validateTripDraft({ ...validDraft, latestTime: 'not-a-time' });
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain('最晚出发时间无效');
+  });
+
   it('masks Chinese real name', () => {
     expect(maskNickname('张三')).toBe('张*');
   });
