@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "拼车广场"
+  "navigationBarTitleText": "\u62fc\u8f66\u5e7f\u573a",
+  "usingComponents": {
+    "trip-card": "/components/trip-card/trip-card"
+  }
 }
