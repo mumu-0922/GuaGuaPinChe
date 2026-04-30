@@ -1,1 +1,25 @@
-<view class="safe-area"><view class="placeholder">行程详情</view></view>
+<view class="safe-area detail-page">
+  <view wx:if="{{loading}}" class="status-card">加载中...</view>
+  <view wx:elif="{{error}}" class="error-card">{{error}}</view>
+
+  <view wx:if="{{tripView}}" class="detail-card">
+    <view class="route">{{tripView.routeText}}</view>
+    <view class="meta-row">
+      <text>{{tripView.timeText}}</text>
+      <text class="dot">?</text>
+      <text>{{tripView.peopleText}}</text>
+    </view>
+    <view class="owner">{{tripView.ownerText}}</view>
+
+    <view class="section-title">备注</view>
+    <view class="note">{{tripView.noteText}}</view>
+
+    <view class="section-title">联系方式</view>
+    <view wx:if="{{contactText}}" class="contact-box">{{contactText}}</view>
+    <view wx:else class="contact-hidden">默认隐藏，点击后将记录查看审计。</view>
+
+    <button class="primary-button action-button" loading="{{revealing}}" disabled="{{revealing}}" bindtap="revealContact">{{contactText ? '刷新联系方式' : '显示联系方式'}}</button>
+    <button class="secondary-button action-button" open-type="share">分享行程</button>
+    <button class="danger-button action-button" bindtap="goReport">举报</button>
+  </view>
+</view>

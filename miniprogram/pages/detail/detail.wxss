@@ -1,3 +1,103 @@
-.placeholder {
+.detail-page {
+  padding-bottom: 48rpx;
+}
+
+.status-card,
+.error-card,
+.detail-card {
+  border-radius: 30rpx;
+}
+
+.status-card,
+.error-card {
+  padding: 32rpx;
+  text-align: center;
+  background: #ffffff;
   color: #64748b;
+}
+
+.error-card {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.detail-card {
+  padding: 32rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.08);
+}
+
+.route {
+  font-size: 42rpx;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+  color: #475569;
+}
+
+.dot {
+  margin: 0 12rpx;
+  color: #94a3b8;
+}
+
+.owner {
+  display: inline-flex;
+  margin-top: 18rpx;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 24rpx;
+}
+
+.section-title {
+  margin-top: 34rpx;
+  color: #0f172a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.note,
+.contact-box,
+.contact-hidden {
+  margin-top: 16rpx;
+  padding: 22rpx;
+  border-radius: 22rpx;
+  line-height: 1.6;
+}
+
+.note {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.contact-box {
+  background: #e8f1ff;
+  color: #004ea2;
+  font-weight: 800;
+}
+
+.contact-hidden {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.action-button {
+  margin-top: 22rpx;
+  height: 82rpx;
+  line-height: 82rpx;
+  font-size: 30rpx;
+}
+
+.danger-button {
+  border-radius: 999rpx;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 700;
 }
