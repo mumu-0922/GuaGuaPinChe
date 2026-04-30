@@ -1,22 +1,22 @@
 <view class="trip-card" bindtap="openTrip">
   <view class="trip-card__header">
     <view class="trip-card__route">
-      <text>{{trip.from || '\u672a\u586b\u5199'}}</text>
+      <text>{{trip.from || '未填写'}}</text>
       <text class="trip-card__arrow">?</text>
-      <text>{{trip.to || '\u672a\u586b\u5199'}}</text>
+      <text>{{trip.to || '未填写'}}</text>
     </view>
     <view class="trip-card__badge {{trip.ownerVerified ? 'trip-card__badge--verified' : ''}}">
-      {{trip.ownerVerified ? '\u5df2\u8ba4\u8bc1' : '\u672a\u8ba4\u8bc1'}}
+      {{trip.ownerVerified ? '已认证' : '未认证'}}
     </view>
   </view>
   <view class="trip-card__meta">
     <text>{{formatTime(trip.earliestTime, trip.latestTime)}}</text>
     <text class="trip-card__dot">?</text>
-    <text>{{trip.peopleCount || 1}}\u4eba\u540c\u884c</text>
+    <text>{{trip.peopleCount || 1}}人同行</text>
   </view>
-  <view class="trip-card__note">{{trip.note || '\u65e0\u5907\u6ce8'}}</view>
+  <view class="trip-card__note">{{trip.note || '无备注'}}</view>
   <view class="trip-card__footer">
-    <text>\u53d1\u5e03\u8005\uff1a{{trip.ownerNickname || '\u540c\u5b66'}}</text>
-    <text class="trip-card__open">\u67e5\u770b\u8be6\u60c5</text>
+    <text>发布者：{{trip.ownerNickname || '同学'}}</text>
+    <text class="trip-card__open">查看详情</text>
   </view>
 </view>
