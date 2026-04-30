@@ -1,1 +1,23 @@
-<view class="safe-area"><view class="placeholder">举报行程</view></view>
+<view class="safe-area report-page">
+  <view class="report-hero">
+    <view class="report-hero__title">举报行程</view>
+    <view class="report-hero__desc">发现黑车、虚假行程或骚扰风险，请提交给管理员处理。</view>
+  </view>
+
+  <view wx:if="{{errors.length}}" class="error-card">
+    <view wx:for="{{errors}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <view class="form-card">
+    <view class="section-title">举报原因</view>
+    <picker mode="selector" range="{{reasonOptions}}" range-key="label" value="{{reasonIndex}}" bindchange="setReason">
+      <view class="picker-field">{{reasonOptions[reasonIndex].label}}</view>
+    </picker>
+
+    <view class="section-title section-title--spaced">详情说明</view>
+    <textarea class="detail-input" value="{{form.detail}}" maxlength="240" placeholder="请补充说明，最多200字" bindinput="setDetail" />
+    <view class="counter">{{form.detail.length}} / 200</view>
+  </view>
+
+  <button class="primary-button submit-button" loading="{{submitting}}" disabled="{{submitting || !tripId}}" bindtap="submitReport">{{submitting ? '提交中...' : '提交举报'}}</button>
+</view>

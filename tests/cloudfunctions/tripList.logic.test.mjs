@@ -2,7 +2,7 @@ import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 
 const require = createRequire(import.meta.url);
-const { buildTripQuery, filterByKeyword, getNextCursorTime, toPublicTrip } = require('../../cloudfunctions/tripList/logic.js');
+const { buildTripQuery, buildTripWhere, filterByKeyword, getNextCursorTime, toPublicTrip } = require('../../cloudfunctions/tripList/logic.js');
 
 describe('tripList logic', () => {
   it('normalizes filters and caps page size', () => {
@@ -42,6 +42,13 @@ describe('tripList logic', () => {
     const filteredTrips = filterByKeyword(fetchedPage, 'T5');
     expect(filteredTrips).toEqual([fetchedPage[0]]);
     expect(getNextCursorTime(fetchedPage)).toBe(1777503600000);
+  });
+
+
+  it('builds mine-only query without forcing open status', () => {
+    expect(buildTripWhere({ mineOnly: true, from: '', to: '', dateStart: null, dateEnd: null, cursorTime: null }, 'openid-1')).toEqual({
+      ownerOpenid: 'openid-1'
+    });
   });
 
 });

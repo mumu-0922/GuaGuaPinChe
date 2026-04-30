@@ -35,6 +35,17 @@ function buildTripQuery(filters) {
   };
 }
 
+
+function buildTripWhere(query, openid, command) {
+  const safeQuery = query || {};
+  const where = safeQuery.mineOnly ? { ownerOpenid: openid } : { status: 'open' };
+  if (safeQuery.from) where.from = safeQuery.from;
+  if (safeQuery.to) where.to = safeQuery.to;
+  if (command && safeQuery.dateStart !== null && safeQuery.dateEnd !== null) where.earliestTime = command.gte(safeQuery.dateStart).and(command.lte(safeQuery.dateEnd));
+  if (command && safeQuery.cursorTime !== null) where.earliestTime = where.earliestTime ? where.earliestTime.and(command.gt(safeQuery.cursorTime)) : command.gt(safeQuery.cursorTime);
+  return where;
+}
+
 function toPublicTrip(trip) {
   const { contactType, contactValue, ...publicTrip } = trip || {};
   return publicTrip;
@@ -52,6 +63,7 @@ function filterByKeyword(trips, keyword) {
 module.exports = {
   normalizeLocation,
   buildTripQuery,
+  buildTripWhere,
   toPublicTrip,
   getNextCursorTime,
   filterByKeyword

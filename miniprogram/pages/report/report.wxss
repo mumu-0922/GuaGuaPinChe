@@ -1,3 +1,86 @@
-.placeholder {
+.report-page {
+  padding-bottom: 48rpx;
+}
+
+.report-hero,
+.form-card,
+.error-card {
+  border-radius: 30rpx;
+}
+
+.report-hero {
+  padding: 36rpx;
+  background: linear-gradient(135deg, #7f1d1d, #dc2626);
+  color: #ffffff;
+}
+
+.report-hero__title {
+  font-size: 42rpx;
+  font-weight: 900;
+}
+
+.report-hero__desc {
+  margin-top: 12rpx;
+  opacity: 0.86;
+  line-height: 1.6;
+}
+
+.error-card {
+  margin-top: 24rpx;
+  padding: 22rpx 28rpx;
+  background: #fee2e2;
+  color: #b91c1c;
+  line-height: 1.8;
+}
+
+.form-card {
+  margin-top: 24rpx;
+  padding: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.section-title {
+  color: #0f172a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.section-title--spaced {
+  margin-top: 30rpx;
+}
+
+.picker-field,
+.detail-input {
+  margin-top: 18rpx;
+  border-radius: 22rpx;
+  background: #f8fafc;
+  border: 2rpx solid #e2e8f0;
+}
+
+.picker-field {
+  padding: 22rpx;
+  color: #334155;
+}
+
+.detail-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 220rpx;
+  padding: 20rpx;
+  color: #0f172a;
+}
+
+.counter {
+  margin-top: 12rpx;
+  text-align: right;
   color: #64748b;
+  font-size: 24rpx;
+}
+
+.submit-button {
+  margin-top: 24rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+  font-size: 30rpx;
 }

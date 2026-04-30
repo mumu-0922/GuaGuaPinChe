@@ -1,3 +1,86 @@
-.placeholder {
+.mine-page {
+  padding-bottom: 48rpx;
+}
+
+.mine-hero,
+.status-card,
+.error-card,
+.mine-trip {
+  border-radius: 30rpx;
+}
+
+.mine-hero {
+  padding: 36rpx;
+  background: linear-gradient(135deg, #004ea2, #2563eb);
+  color: #ffffff;
+}
+
+.mine-hero__title {
+  font-size: 42rpx;
+  font-weight: 900;
+}
+
+.mine-hero__desc {
+  margin-top: 12rpx;
+  opacity: 0.86;
+  line-height: 1.6;
+}
+
+.status-card,
+.error-card {
+  margin-top: 24rpx;
+  padding: 32rpx;
+  text-align: center;
+  background: #ffffff;
   color: #64748b;
+}
+
+.error-card {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.mine-list {
+  margin-top: 24rpx;
+}
+
+.mine-trip {
+  margin-bottom: 20rpx;
+  padding: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.mine-trip__route {
+  color: #0f172a;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.mine-trip__meta {
+  margin-top: 12rpx;
+  color: #64748b;
+}
+
+.status-actions {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 22rpx;
+}
+
+.status-button {
+  flex: 1;
+  margin: 0;
+  height: 64rpx;
+  line-height: 64rpx;
+  border-radius: 999rpx;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 24rpx;
+}
+
+.status-button--active {
+  background: #e8f1ff;
+  color: #004ea2;
+  font-weight: 800;
 }

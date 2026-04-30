@@ -1,1 +1,32 @@
-<view class="safe-area"><view class="placeholder">我的拼车</view></view>
+<view class="safe-area mine-page">
+  <view class="mine-hero">
+    <view class="mine-hero__title">我的拼车</view>
+    <view class="mine-hero__desc">管理你发布的行程，可随时标记满员或取消。</view>
+  </view>
+
+  <view wx:if="{{error}}" class="error-card">{{error}}</view>
+  <view wx:if="{{loading && trips.length === 0}}" class="status-card">加载中...</view>
+  <view wx:elif="{{trips.length === 0}}" class="status-card">暂无本人行程</view>
+
+  <view wx:else class="mine-list">
+    <view class="mine-trip" wx:for="{{trips}}" wx:for-item="trip" wx:key="_id">
+      <view class="mine-trip__main" data-id="{{trip._id}}" bindtap="openTrip">
+        <view class="mine-trip__route">{{trip.routeText}}</view>
+        <view class="mine-trip__meta">{{trip.timeText}} ? {{trip.statusLabel}}</view>
+      </view>
+      <view class="status-actions">
+        <button
+          wx:for="{{statusOptions}}"
+          wx:for-item="status"
+          wx:key="value"
+          class="status-button {{trip.status === status.value ? 'status-button--active' : ''}}"
+          data-id="{{trip._id}}"
+          data-status="{{status.value}}"
+          loading="{{updatingId === trip._id}}"
+          disabled="{{updatingId && updatingId !== trip._id}}"
+          bindtap="updateStatus"
+        >{{status.label}}</button>
+      </view>
+    </view>
+  </view>
+</view>
