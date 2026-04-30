@@ -34,6 +34,14 @@ Page({
     this.loadTrips(true);
   },
 
+  onShow() {
+    const app = getApp();
+    if (app && app.globalData && app.globalData.shouldRefreshTrips) {
+      app.globalData.shouldRefreshTrips = false;
+      this.loadTrips(true);
+    }
+  },
+
   onPullDownRefresh() {
     this.loadTrips(true).finally(() => wx.stopPullDownRefresh());
   },

@@ -1,3 +1,174 @@
-.placeholder {
+.publish-page {
+  padding-bottom: 56rpx;
+}
+
+.publish-hero,
+.notice-card,
+.error-card,
+.form-card {
+  border-radius: 30rpx;
+}
+
+.publish-hero {
+  padding: 36rpx;
+  background: linear-gradient(135deg, #004ea2, #2563eb);
+  color: #ffffff;
+}
+
+.publish-hero__title {
+  font-size: 42rpx;
+  font-weight: 900;
+}
+
+.publish-hero__desc {
+  margin-top: 12rpx;
+  opacity: 0.86;
+  line-height: 1.6;
+}
+
+.notice-card {
+  margin-top: 24rpx;
+  padding: 24rpx 28rpx;
+  background: #fff7ed;
+  color: #9a3412;
+  line-height: 1.8;
+}
+
+.error-card {
+  margin-top: 24rpx;
+  padding: 22rpx 28rpx;
+  background: #fee2e2;
+  color: #b91c1c;
+  line-height: 1.8;
+}
+
+.form-card {
+  margin-top: 24rpx;
+  padding: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.section-title {
+  color: #0f172a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.section-title--spaced {
+  margin-top: 30rpx;
+}
+
+.field-row,
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 18rpx;
+}
+
+.field,
+.picker-field,
+.note-input {
+  border-radius: 22rpx;
+  background: #f8fafc;
+  border: 2rpx solid #e2e8f0;
+}
+
+.field {
+  flex: 1;
+  display: block;
+  padding: 18rpx 20rpx;
+}
+
+.field--full {
+  margin-top: 18rpx;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 8rpx;
   color: #64748b;
+  font-size: 22rpx;
+}
+
+.field input {
+  color: #0f172a;
+  font-size: 28rpx;
+}
+
+.swap-button {
+  margin: 0;
+  padding: 0;
+  width: 64rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  border-radius: 50%;
+  background: #e8f1ff;
+  color: #004ea2;
+  font-weight: 900;
+}
+
+.chips-title {
+  margin-top: 24rpx;
+  color: #334155;
+  font-weight: 700;
+}
+
+.group {
+  margin-top: 18rpx;
+}
+
+.group__label {
+  color: #64748b;
+  font-size: 24rpx;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 12rpx;
+}
+
+.chip {
+  margin: 0;
+  padding: 0 20rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  border-radius: 999rpx;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 24rpx;
+}
+
+.picker-field {
+  margin-top: 18rpx;
+  padding: 22rpx;
+  color: #334155;
+}
+
+.time-row picker {
+  flex: 1;
+}
+
+.note-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 168rpx;
+  margin-top: 18rpx;
+  padding: 20rpx;
+  color: #0f172a;
+}
+
+.submit-button,
+.reset-button {
+  margin-top: 24rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+  font-size: 30rpx;
+}
+
+.reset-button {
+  margin-top: 16rpx;
 }

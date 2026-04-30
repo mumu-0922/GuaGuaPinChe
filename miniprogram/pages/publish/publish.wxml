@@ -1,1 +1,71 @@
-<view class="safe-area"><view class="placeholder">发起拼车</view></view>
+<view class="safe-area publish-page">
+  <view class="publish-hero">
+    <view class="publish-hero__title">发起拼车</view>
+    <view class="publish-hero__desc">填写你的真实出行需求，联系方式仅在详情页点击后展示。</view>
+  </view>
+
+  <view class="notice-card">
+    <view>请只发布本人真实出行需求</view>
+    <view>自驾请在备注写明</view>
+    <view>费用只可合理分摊</view>
+    <view>不要提前支付保证金或押金</view>
+  </view>
+
+  <view wx:if="{{errors.length}}" class="error-card">
+    <view wx:for="{{errors}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <view class="form-card">
+    <view class="section-title">路线信息</view>
+    <view class="field-row">
+      <label class="field" bindtap="setChoosingField" data-field="from">
+        <text class="field__label">出发地</text>
+        <input value="{{draft.from}}" placeholder="如：长安校区" data-field="from" bindinput="setField" />
+      </label>
+      <button class="swap-button" bindtap="swapRoute">&#8644;</button>
+      <label class="field" bindtap="setChoosingField" data-field="to">
+        <text class="field__label">到达地</text>
+        <input value="{{draft.to}}" placeholder="如：咸阳机场" data-field="to" bindinput="setField" />
+      </label>
+    </view>
+
+    <view class="chips-title">常用地点（当前填入：{{choosingField === 'from' ? '出发地' : '到达地'}}）</view>
+    <view class="group" wx:for="{{locationGroups}}" wx:key="label">
+      <view class="group__label">{{item.icon}} {{item.label}}</view>
+      <view class="chips">
+        <button class="chip" wx:for="{{item.options}}" wx:for-item="option" wx:key="*this" data-field="{{choosingField}}" data-value="{{option}}" bindtap="chooseLocation">{{option}}</button>
+      </view>
+    </view>
+
+    <view class="section-title section-title--spaced">时间与人数</view>
+    <picker mode="date" value="{{draft.date}}" data-field="date" bindchange="setField">
+      <view class="picker-field">出行日期：{{draft.date}}</view>
+    </picker>
+    <view class="time-row">
+      <picker mode="time" value="{{draft.earliestClock}}" data-field="earliestClock" bindchange="setField">
+        <view class="picker-field">最早：{{draft.earliestClock}}</view>
+      </picker>
+      <picker mode="time" value="{{draft.latestClock}}" data-field="latestClock" bindchange="setField">
+        <view class="picker-field">最晚：{{draft.latestClock}}</view>
+      </picker>
+    </view>
+    <picker mode="selector" range="{{peopleOptions}}" value="{{peopleIndex}}" bindchange="setPeopleCount">
+      <view class="picker-field">同行人数：{{draft.peopleCount}} 人</view>
+    </picker>
+
+    <view class="section-title section-title--spaced">联系方式</view>
+    <picker mode="selector" range="{{contactOptions}}" range-key="label" value="{{contactTypeIndex}}" bindchange="setContactType">
+      <view class="picker-field">类型：{{contactOptions[contactTypeIndex].label}}</view>
+    </picker>
+    <label class="field field--full">
+      <text class="field__label">联系方式</text>
+      <input value="{{draft.contactValue}}" placeholder="QQ / 微信 / 手机号" data-field="contactValue" bindinput="setField" />
+    </label>
+
+    <view class="section-title section-title--spaced">备注</view>
+    <textarea class="note-input" value="{{draft.note}}" maxlength="120" placeholder="例：一人一箱，T5航站楼" data-field="note" bindinput="setField" />
+  </view>
+
+  <button class="primary-button submit-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitTrip">{{submitting ? '发布中...' : '提交发布'}}</button>
+  <button class="secondary-button reset-button" bindtap="resetDraft">清空重填</button>
+</view>
