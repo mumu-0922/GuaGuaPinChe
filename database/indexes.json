@@ -1,0 +1,77 @@
+{
+  "trips": [
+    {
+      "name": "status_earliestTime",
+      "fields": [
+        {
+          "field": "status",
+          "order": "asc"
+        },
+        {
+          "field": "earliestTime",
+          "order": "asc"
+        }
+      ]
+    },
+    {
+      "name": "ownerOpenid_updatedAt",
+      "fields": [
+        {
+          "field": "ownerOpenid",
+          "order": "asc"
+        },
+        {
+          "field": "updatedAt",
+          "order": "desc"
+        }
+      ]
+    },
+    {
+      "name": "from_to_earliestTime",
+      "fields": [
+        {
+          "field": "from",
+          "order": "asc"
+        },
+        {
+          "field": "to",
+          "order": "asc"
+        },
+        {
+          "field": "earliestTime",
+          "order": "asc"
+        }
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "name": "status_createdAt",
+      "fields": [
+        {
+          "field": "status",
+          "order": "asc"
+        },
+        {
+          "field": "createdAt",
+          "order": "desc"
+        }
+      ]
+    }
+  ],
+  "contactViews": [
+    {
+      "name": "tripId_createdAt",
+      "fields": [
+        {
+          "field": "tripId",
+          "order": "asc"
+        },
+        {
+          "field": "createdAt",
+          "order": "desc"
+        }
+      ]
+    }
+  ]
+}
