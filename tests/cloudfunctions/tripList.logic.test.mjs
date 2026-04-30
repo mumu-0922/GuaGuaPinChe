@@ -2,7 +2,7 @@ import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 
 const require = createRequire(import.meta.url);
-const { buildTripQuery, filterByKeyword, toPublicTrip } = require('../../cloudfunctions/tripList/logic.js');
+const { buildTripQuery, filterByKeyword, getNextCursorTime, toPublicTrip } = require('../../cloudfunctions/tripList/logic.js');
 
 describe('tripList logic', () => {
   it('normalizes filters and caps page size', () => {
@@ -33,4 +33,15 @@ describe('tripList logic', () => {
     expect(filterByKeyword(trips, 'T5')).toEqual([trips[0]]);
     expect(filterByKeyword(trips, '\u897f\u5b89\u7ad9')).toEqual([trips[1]]);
   });
+
+  it('builds next cursor from the fetched page before keyword filtering', () => {
+    const fetchedPage = [
+      { earliestTime: 1777500000000, note: 'T5' },
+      { earliestTime: 1777503600000, note: '\u4e0d\u5339\u914d' }
+    ];
+    const filteredTrips = filterByKeyword(fetchedPage, 'T5');
+    expect(filteredTrips).toEqual([fetchedPage[0]]);
+    expect(getNextCursorTime(fetchedPage)).toBe(1777503600000);
+  });
+
 });

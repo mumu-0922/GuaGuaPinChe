@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk');
-const { buildTripQuery, filterByKeyword, toPublicTrip } = require('./logic');
+const { buildTripQuery, filterByKeyword, getNextCursorTime, toPublicTrip } = require('./logic');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
@@ -26,7 +26,7 @@ exports.main = async (event) => {
   return {
     ok: true,
     trips,
-    nextCursorTime: trips.length ? trips[trips.length - 1].earliestTime : null,
+    nextCursorTime: getNextCursorTime(publicTrips),
     hasMore: result.data.length === query.pageSize
   };
 };

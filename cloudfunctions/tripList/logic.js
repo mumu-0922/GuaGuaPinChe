@@ -40,6 +40,10 @@ function toPublicTrip(trip) {
   return publicTrip;
 }
 
+function getNextCursorTime(trips) {
+  return trips.length ? trips[trips.length - 1].earliestTime : null;
+}
+
 function filterByKeyword(trips, keyword) {
   if (!keyword) return trips;
   return trips.filter((trip) => `${trip.from || ''} ${trip.to || ''} ${trip.note || ''}`.includes(keyword));
@@ -49,5 +53,6 @@ module.exports = {
   normalizeLocation,
   buildTripQuery,
   toPublicTrip,
+  getNextCursorTime,
   filterByKeyword
 };
