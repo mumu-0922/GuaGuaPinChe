@@ -27,3 +27,6 @@ dist/
 Thumbs.db
 .vscode/
 .idea/
+
+# WeChat DevTools local settings
+project.private.config.json
