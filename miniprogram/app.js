@@ -5,6 +5,9 @@ App({
       console.error('wx.cloud is unavailable');
       return;
     }
-    wx.cloud.init({ traceUser: true });
+    wx.cloud.init({
+      env: 'cloud1-d7gbsu1cnf8cf44b5',
+      traceUser: true
+    });
   }
 });
