@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
-  "appid": "wx00db9dd463461d6e",
+  "appid": "touristappid",
   "projectname": "guagua-carpool",
   "compileType": "miniprogram",
   "setting": {
