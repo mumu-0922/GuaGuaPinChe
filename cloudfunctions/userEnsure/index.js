@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk');
-const { buildUserDocument, buildUserUpdate } = require('./logic');
+const { DEFAULT_USER_FIELDS, buildUserDocument, buildUserUpdate, mergeUserDefaults } = require('./logic');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
@@ -17,7 +17,14 @@ exports.main = async (event) => {
     return { ok: true, user: { ...userDoc, _id: openid } };
   }
 
-  const updates = buildUserUpdate(profile, now);
+  const defaultsBackfill = {};
+  const mergedUser = mergeUserDefaults(existing.data);
+  Object.keys(DEFAULT_USER_FIELDS).forEach((key) => {
+    if (!Object.prototype.hasOwnProperty.call(existing.data, key)) {
+      defaultsBackfill[key] = mergedUser[key];
+    }
+  });
+  const updates = { ...buildUserUpdate(profile, now), ...defaultsBackfill };
   await db.collection('users').doc(openid).update({ data: updates });
   return { ok: true, user: { ...existing.data, ...updates, _id: openid } };
 };

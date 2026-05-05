@@ -70,9 +70,18 @@ function buildTripDocument(draft, owner, now) {
   };
 }
 
+function canCreateTrip(user) {
+  const safeUser = user || {};
+  if (safeUser.blocked) return { ok: false, error: '\u8d26\u53f7\u5df2\u88ab\u9650\u5236\uff0c\u4e0d\u80fd\u53d1\u5e03\u884c\u7a0b' };
+  if (safeUser.verifyStatus === 'pending') return { ok: false, error: '\u8ba4\u8bc1\u5ba1\u6838\u4e2d\uff0c\u901a\u8fc7\u540e\u53ef\u53d1\u5e03\u884c\u7a0b' };
+  if (safeUser.verifyStatus !== 'verified') return { ok: false, error: '\u5b8c\u6210\u897f\u5de5\u5927\u8ba4\u8bc1\u540e\u53ef\u53d1\u5e03\u884c\u7a0b' };
+  return { ok: true, error: '' };
+}
+
 module.exports = {
   normalizeLocation,
   maskNickname,
   validateServerTripDraft,
-  buildTripDocument
+  buildTripDocument,
+  canCreateTrip
 };
