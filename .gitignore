@@ -30,3 +30,6 @@ Thumbs.db
 
 # WeChat DevTools local settings
 project.private.config.json
+
+# Git worktrees
+.worktrees/
