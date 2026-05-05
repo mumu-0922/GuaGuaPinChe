@@ -71,6 +71,7 @@ describe('user auth defaults and permissions', () => {
 
   it('checks whether a user can create trips', () => {
     expect(canCreateTrip({ verifyStatus: 'verified', blocked: false })).toEqual({ ok: true, error: '' });
+    expect(canCreateTrip({ verified: true, blocked: false })).toEqual({ ok: true, error: '' });
     expect(canCreateTrip({ verifyStatus: 'pending', blocked: false })).toEqual({ ok: false, error: '认证审核中，通过后可发布行程' });
     expect(canCreateTrip({ verifyStatus: 'verified', blocked: true })).toEqual({ ok: false, error: '账号已被限制，不能发布行程' });
     expect(canCreateTrip({ verifyStatus: 'unverified', blocked: false })).toEqual({ ok: false, error: '完成西工大认证后可发布行程' });
@@ -79,10 +80,10 @@ describe('user auth defaults and permissions', () => {
   it('checks whether a viewer can reveal contact while preserving trip visibility wording', () => {
     expect(canRevealContact({ status: 'hidden' })).toEqual({ ok: false, error: '行程不可查看联系方式' });
     expect(canViewerRevealContact({ verifyStatus: 'verified', blocked: false }, { status: 'open' })).toEqual({ ok: true, error: '' });
+    expect(canViewerRevealContact({ verified: true, blocked: false }, { status: 'open' })).toEqual({ ok: true, error: '' });
     expect(canViewerRevealContact({ verifyStatus: 'unverified', blocked: false }, { status: 'open' })).toEqual({ ok: false, error: '完成西工大认证后可查看联系方式' });
     expect(canViewerRevealContact({ verifyStatus: 'verified', blocked: true }, { status: 'open' })).toEqual({ ok: false, error: '账号已被限制，不能查看联系方式' });
     expect(canViewerRevealContact({ verifyStatus: 'pending', blocked: false }, { status: 'open' })).toEqual({ ok: false, error: '认证审核中，通过后可查看联系方式' });
     expect(canViewerRevealContact({ verifyStatus: 'verified', blocked: false }, { status: 'hidden' })).toEqual({ ok: false, error: '行程不可查看联系方式' });
   });
 });
-

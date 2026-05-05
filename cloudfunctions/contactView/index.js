@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk');
-const { buildContactViewLog, canRevealContact } = require('./logic');
+const { buildContactViewLog, canViewerRevealContact } = require('./logic');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
@@ -12,7 +12,9 @@ exports.main = async (event) => {
 
   const tripResult = await db.collection('trips').doc(tripId).get().catch(() => null);
   const trip = tripResult && tripResult.data;
-  const decision = canRevealContact(trip);
+  const viewerResult = await db.collection('users').doc(viewerOpenid).get().catch(() => null);
+  const viewer = viewerResult && viewerResult.data;
+  const decision = canViewerRevealContact(viewer, trip);
   if (!decision.ok) return { ok: false, errors: [decision.error] };
 
   await db.collection('contactViews').add({ data: buildContactViewLog(tripId, viewerOpenid, trip.ownerOpenid, Date.now()) });

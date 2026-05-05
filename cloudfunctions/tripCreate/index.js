@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk');
-const { buildTripDocument, validateServerTripDraft } = require('./logic');
+const { buildTripDocument, canCreateTrip, validateServerTripDraft } = require('./logic');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
@@ -13,6 +13,8 @@ exports.main = async (event) => {
 
   const userResult = await db.collection('users').doc(openid).get().catch(() => null);
   if (!userResult || !userResult.data) return { ok: false, errors: ['\u7528\u6237\u4e0d\u5b58\u5728'] };
+  const permission = canCreateTrip(userResult.data);
+  if (!permission.ok) return { ok: false, errors: [permission.error] };
 
   const now = Date.now();
   const trip = buildTripDocument(draft, { ...userResult.data, openid }, now);
