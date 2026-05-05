@@ -73,5 +73,33 @@
         }
       ]
     }
+  ],
+  "verificationRequests": [
+    {
+      "name": "status_createdAt",
+      "fields": [
+        {
+          "field": "status",
+          "order": "asc"
+        },
+        {
+          "field": "createdAt",
+          "order": "desc"
+        }
+      ]
+    },
+    {
+      "name": "userOpenid_status",
+      "fields": [
+        {
+          "field": "userOpenid",
+          "order": "asc"
+        },
+        {
+          "field": "status",
+          "order": "asc"
+        }
+      ]
+    }
   ]
 }
