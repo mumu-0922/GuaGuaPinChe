@@ -42,6 +42,19 @@
           "order": "asc"
         }
       ]
+    },
+    {
+      "name": "ownerOpenid_status",
+      "fields": [
+        {
+          "field": "ownerOpenid",
+          "order": "asc"
+        },
+        {
+          "field": "status",
+          "order": "asc"
+        }
+      ]
     }
   ],
   "reports": [
@@ -98,6 +111,51 @@
         {
           "field": "status",
           "order": "asc"
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "name": "verifyStatus_updatedAt",
+      "fields": [
+        {
+          "field": "verifyStatus",
+          "order": "asc"
+        },
+        {
+          "field": "updatedAt",
+          "order": "desc"
+        }
+      ]
+    },
+    {
+      "name": "blocked_updatedAt",
+      "fields": [
+        {
+          "field": "blocked",
+          "order": "asc"
+        },
+        {
+          "field": "updatedAt",
+          "order": "desc"
+        }
+      ]
+    },
+    {
+      "name": "verifyStatus_blocked_updatedAt",
+      "fields": [
+        {
+          "field": "verifyStatus",
+          "order": "asc"
+        },
+        {
+          "field": "blocked",
+          "order": "asc"
+        },
+        {
+          "field": "updatedAt",
+          "order": "desc"
         }
       ]
     }
