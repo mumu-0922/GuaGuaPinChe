@@ -1,0 +1,46 @@
+﻿<view class="safe-area verify-page">
+  <view class="verify-hero">
+    <view class="verify-hero__title">校园认证</view>
+    <view class="verify-hero__desc">完成西工大身份认证后，可发布行程并查看联系方式。</view>
+  </view>
+
+  <view class="status-card status-card--{{statusView.tone}}">
+    <view class="status-card__label">{{statusView.label}}</view>
+    <view class="status-card__action">{{statusView.actionText}}</view>
+  </view>
+
+  <view class="email-card email-card--disabled">
+    <view class="section-title">校园邮箱认证</view>
+    <view class="email-card__desc">校园邮箱认证即将支持</view>
+  </view>
+
+  <view wx:if="{{errors.length}}" class="error-card">
+    <view wx:for="{{errors}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <view class="form-card">
+    <view class="section-title">人工认证</view>
+    <view class="field field--full">
+      <text class="field__label">学号</text>
+      <input value="{{form.studentId}}" placeholder="请输入学号" data-field="studentId" bindinput="setField" />
+    </view>
+    <view class="field field--full">
+      <text class="field__label">真实姓名</text>
+      <input value="{{form.realName}}" placeholder="请输入真实姓名" data-field="realName" bindinput="setField" />
+    </view>
+    <view class="field field--full">
+      <text class="field__label">学院</text>
+      <input value="{{form.college}}" placeholder="如：计算机学院" data-field="college" bindinput="setField" />
+    </view>
+    <view class="field field--full">
+      <text class="field__label">年级</text>
+      <input value="{{form.grade}}" placeholder="如：2024" data-field="grade" bindinput="setField" />
+    </view>
+    <view class="section-title section-title--spaced">补充说明（选填）</view>
+    <textarea class="note-input" value="{{form.note}}" maxlength="120" placeholder="如所在校区、专业等，便于管理员审核" data-field="note" bindinput="setField" />
+  </view>
+
+  <button class="primary-button submit-button" loading="{{submitting}}" disabled="{{submitting || loading || statusView.tone === 'warning' || statusView.tone === 'positive'}}" bindtap="submitManual">
+    {{submitting ? '提交中...' : statusView.actionText}}
+  </button>
+</view>

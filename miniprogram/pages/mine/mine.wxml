@@ -4,6 +4,19 @@
     <view class="mine-hero__desc">管理你发布的行程，可随时标记满员或取消。</view>
   </view>
 
+  <view class="verify-card verify-card--{{statusView.tone}}">
+    <view>
+      <view class="verify-card__title">{{statusView.label}}</view>
+      <view class="verify-card__desc">{{statusView.actionText}}</view>
+    </view>
+    <button class="verify-card__button" bindtap="goVerify">校园认证</button>
+  </view>
+
+  <view wx:if="{{user.role === 'admin'}}" class="admin-card" bindtap="goAdmin">
+    <view class="admin-card__title">管理员入口</view>
+    <view class="admin-card__desc">处理认证、举报和用户管理</view>
+  </view>
+
   <view wx:if="{{error}}" class="error-card">{{error}}</view>
   <view wx:if="{{loading && trips.length === 0}}" class="status-card">加载中...</view>
   <view wx:elif="{{trips.length === 0}}" class="status-card">暂无本人行程</view>

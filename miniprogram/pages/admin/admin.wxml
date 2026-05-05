@@ -1,0 +1,6 @@
+<view class="safe-area admin-placeholder">
+  <view class="admin-placeholder__card">
+    <view class="admin-placeholder__title">管理员功能开发中</view>
+    <view class="admin-placeholder__desc">下一步将支持认证审核、举报处理、用户管理。</view>
+  </view>
+</view>
