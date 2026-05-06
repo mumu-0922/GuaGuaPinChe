@@ -37,6 +37,12 @@ function loadCloudFunction(relativePath, options) {
                 async get() {
                   if (!Object.prototype.hasOwnProperty.call(collections[name] || {}, id)) throw new Error('not found');
                   return { data: collections[name][id] };
+                },
+                async update(payload) {
+                  if (!Object.prototype.hasOwnProperty.call(collections[name] || {}, id)) throw new Error('not found');
+                  collections[name][id] = { ...collections[name][id], ...payload.data };
+                  writes[name].push({ id, payload });
+                  return { updated: 1 };
                 }
               };
             },
@@ -52,7 +58,7 @@ function loadCloudFunction(relativePath, options) {
 
   const id = require.resolve(relativePath);
   delete require.cache[id];
-  return { cloudFunction: require(relativePath), writes };
+  return { cloudFunction: require(relativePath), writes, collections };
 }
 
 const validDraft = {
@@ -108,5 +114,59 @@ describe('permission enforcement cloudfunction entries', () => {
       contactValue: '123456789'
     });
     expect(writes.contactViews).toHaveLength(1);
+  });
+
+  it('tripUpdateStatus rejects blocked owners before status changes', async () => {
+    const { cloudFunction, writes, collections } = loadCloudFunction('../../cloudfunctions/tripUpdateStatus/index.js', {
+      openid: 'blocked-owner',
+      users: {
+        'blocked-owner': { verifyStatus: 'verified', blocked: true }
+      },
+      trips: {
+        t1: { ownerOpenid: 'blocked-owner', status: 'cancelled' }
+      }
+    });
+
+    await expect(cloudFunction.main({ tripId: 't1', status: 'open' })).resolves.toEqual({
+      ok: false,
+      errors: ['账号已被限制，不能发布行程']
+    });
+    expect(writes.trips).toHaveLength(0);
+    expect(collections.trips.t1.status).toBe('cancelled');
+  });
+
+  it('tripUpdateStatus rejects reopening trips for unverified owners', async () => {
+    const { cloudFunction, writes, collections } = loadCloudFunction('../../cloudfunctions/tripUpdateStatus/index.js', {
+      openid: 'owner-1',
+      users: {
+        'owner-1': { verifyStatus: 'unverified', blocked: false }
+      },
+      trips: {
+        t1: { ownerOpenid: 'owner-1', status: 'cancelled' }
+      }
+    });
+
+    await expect(cloudFunction.main({ tripId: 't1', status: 'open' })).resolves.toEqual({
+      ok: false,
+      errors: ['完成西工大认证后可发布行程']
+    });
+    expect(writes.trips).toHaveLength(0);
+    expect(collections.trips.t1.status).toBe('cancelled');
+  });
+
+  it('tripUpdateStatus allows old verified owners to reopen trips', async () => {
+    const { cloudFunction, writes, collections } = loadCloudFunction('../../cloudfunctions/tripUpdateStatus/index.js', {
+      openid: 'old-owner',
+      users: {
+        'old-owner': { verified: true, blocked: false }
+      },
+      trips: {
+        t1: { ownerOpenid: 'old-owner', status: 'cancelled' }
+      }
+    });
+
+    await expect(cloudFunction.main({ tripId: 't1', status: 'open' })).resolves.toEqual({ ok: true });
+    expect(writes.trips).toHaveLength(1);
+    expect(collections.trips.t1.status).toBe('open');
   });
 });
