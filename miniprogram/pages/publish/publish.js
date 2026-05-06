@@ -15,6 +15,36 @@ function findContactIndex(contactType) {
   return index >= 0 ? index : 0;
 }
 
+function getEnsuredUser(userResult) {
+  return userResult && userResult.user ? userResult.user : null;
+}
+
+function canPublishTrip(user) {
+  if (!user || user.blocked) return false;
+  const verifyStatus = user.verifyStatus || (user.verified === true ? 'verified' : '');
+  return verifyStatus === 'verified';
+}
+
+function showPublishVerifyPrompt(user) {
+  wx.showModal({
+    title: '\u9700\u8981\u6821\u56ed\u8ba4\u8bc1',
+    content: user && user.verifyStatus === 'pending' ? '\u8ba4\u8bc1\u5ba1\u6838\u4e2d\uff0c\u901a\u8fc7\u540e\u53ef\u53d1\u5e03\u884c\u7a0b' : '\u5b8c\u6210\u897f\u5de5\u5927\u8ba4\u8bc1\u540e\u53ef\u53d1\u5e03\u884c\u7a0b',
+    confirmText: '\u53bb\u8ba4\u8bc1',
+    success: (res) => {
+      if (res.confirm) wx.navigateTo({ url: '/pages/verify/verify' });
+    }
+  });
+}
+
+function showPublishBlockedPrompt(user) {
+  const reason = user && user.blockedReason ? `\uff1a${user.blockedReason}` : '';
+  wx.showModal({
+    title: '\u8d26\u53f7\u5df2\u88ab\u9650\u5236',
+    content: `\u8d26\u53f7\u5df2\u88ab\u9650\u5236\uff0c\u4e0d\u80fd\u53d1\u5e03\u884c\u7a0b${reason}`,
+    showCancel: false
+  });
+}
+
 Page({
   data: {
     locationGroups: LOCATION_GROUPS,
@@ -104,19 +134,44 @@ Page({
         if (!userResult || userResult.ok === false) {
           throw new Error((userResult && userResult.errors && userResult.errors[0]) || '\u7528\u6237\u521d\u59cb\u5316\u5931\u8d25');
         }
+        const user = getEnsuredUser(userResult);
+        if (!canPublishTrip(user)) {
+          this.setData({ submitting: false });
+          if (user && user.blocked === true) {
+            showPublishBlockedPrompt(user);
+          } else {
+            showPublishVerifyPrompt(user);
+          }
+          return Promise.reject({ permissionPromptShown: true });
+        }
         return callFunction('tripCreate', { trip });
       })
       .then((createResult) => {
         if (!createResult || createResult.ok === false) {
           throw new Error((createResult && createResult.errors && createResult.errors[0]) || '\u53d1\u5e03\u5931\u8d25');
         }
+        const similarPayload = createResult.tripId ? { tripId: createResult.tripId } : { trip };
+        return callFunction('tripSimilar', similarPayload).catch(() => null);
+      })
+      .then((similarResult) => {
         const app = getApp();
         if (app && app.globalData) app.globalData.shouldRefreshTrips = true;
-        wx.showToast({ title: '\u5df2\u53d1\u5e03', icon: 'success' });
+        const count = similarResult && similarResult.ok !== false && Array.isArray(similarResult.trips) ? similarResult.trips.length : 0;
         this.resetDraft();
+        if (count > 0) {
+          wx.showModal({
+            title: '\u53d1\u5e03\u6210\u529f',
+            content: `\u53d1\u73b0 ${count} \u4e2a\u76f8\u4f3c\u884c\u7a0b\uff0c\u53ef\u4ee5\u53bb\u770b\u770b`,
+            showCancel: false,
+            complete: () => wx.switchTab({ url: '/pages/index/index' })
+          });
+          return;
+        }
+        wx.showToast({ title: '\u5df2\u53d1\u5e03', icon: 'success' });
         setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 500);
       })
       .catch((error) => {
+        if (error && error.permissionPromptShown) return;
         const message = error && error.message ? error.message : '\u53d1\u5e03\u5931\u8d25';
         this.setData({ errors: [message] });
         wx.showToast({ title: message, icon: 'none' });

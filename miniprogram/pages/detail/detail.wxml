@@ -6,7 +6,7 @@
     <view class="route">{{tripView.routeText}}</view>
     <view class="meta-row">
       <text>{{tripView.timeText}}</text>
-      <text class="dot">?</text>
+      <text class="dot">·</text>
       <text>{{tripView.peopleText}}</text>
     </view>
     <view class="owner">{{tripView.ownerText}}</view>
@@ -21,5 +21,15 @@
     <button class="primary-button action-button" loading="{{revealing}}" disabled="{{revealing}}" bindtap="revealContact">{{contactText ? '刷新联系方式' : '显示联系方式'}}</button>
     <button class="secondary-button action-button" open-type="share">分享行程</button>
     <button class="danger-button action-button" bindtap="goReport">举报</button>
+  </view>
+
+  <view wx:if="{{similarLoading || similarTrips.length}}" class="similar-section">
+    <view class="similar-title">相似行程</view>
+    <view wx:if="{{similarLoading}}" class="similar-loading">正在查找相似行程...</view>
+    <view wx:for="{{similarTrips}}" wx:key="_id" class="similar-card" data-id="{{item._id}}" bindtap="openSimilarTrip">
+      <view class="similar-route">{{item.view.routeText}}</view>
+      <view class="similar-meta">{{item.view.timeText}} · {{item.view.peopleText}}</view>
+      <view class="similar-owner">{{item.view.ownerText}}</view>
+    </view>
   </view>
 </view>

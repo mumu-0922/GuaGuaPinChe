@@ -16,6 +16,13 @@ describe('userEnsure logic', () => {
       avatarUrl: 'https://a.example/a.png',
       verified: false,
       verifiedLabel: '\u672a\u8ba4\u8bc1',
+      verifyStatus: 'unverified',
+      verifyMethod: '',
+      rejectReason: '',
+      blocked: false,
+      blockedReason: '',
+      blockedAt: null,
+      blockedBy: '',
       role: 'user',
       createdAt: 1777480000000,
       updatedAt: 1777480000000

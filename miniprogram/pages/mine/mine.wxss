@@ -3,6 +3,8 @@
 }
 
 .mine-hero,
+.verify-card,
+.admin-card,
 .status-card,
 .error-card,
 .mine-trip {
@@ -24,6 +26,61 @@
   margin-top: 12rpx;
   opacity: 0.86;
   line-height: 1.6;
+}
+
+.verify-card,
+.admin-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-top: 24rpx;
+  padding: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.verify-card__title,
+.admin-card__title {
+  color: #0f172a;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.verify-card__desc,
+.admin-card__desc {
+  margin-top: 8rpx;
+  color: #64748b;
+  font-size: 24rpx;
+}
+
+.verify-card__button {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 24rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  border-radius: 999rpx;
+  background: #e8f1ff;
+  color: #004ea2;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.verify-card--warning {
+  background: #fff7ed;
+}
+
+.verify-card--positive {
+  background: #ecfdf5;
+}
+
+.verify-card--danger {
+  background: #fee2e2;
+}
+
+.admin-card {
+  background: #eff6ff;
 }
 
 .status-card,

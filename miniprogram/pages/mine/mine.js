@@ -1,9 +1,12 @@
 const { callFunction } = require('../../utils/cloud');
 const { STATUS_OPTIONS, buildStatusUpdatePayload, formatMineTrip } = require('./view');
+const { getVerifyStatusView } = require('../verify/form');
 
 Page({
   data: {
     statusOptions: STATUS_OPTIONS,
+    user: null,
+    statusView: getVerifyStatusView(null),
     trips: [],
     loading: false,
     updatingId: '',
@@ -11,11 +14,32 @@ Page({
   },
 
   onShow() {
+    this.loadUser();
     this.loadMineTrips();
   },
 
   onPullDownRefresh() {
-    this.loadMineTrips().finally(() => wx.stopPullDownRefresh());
+    Promise.all([this.loadUser(), this.loadMineTrips()]).finally(() => wx.stopPullDownRefresh());
+  },
+
+  loadUser() {
+    return callFunction('userEnsure', { profile: { nickname: '' } })
+      .then((result) => {
+        if (!result || result.ok === false) {
+          throw new Error((result && result.errors && result.errors[0]) || '\u7528\u6237\u521d\u59cb\u5316\u5931\u8d25');
+        }
+        const user = result.user || null;
+        this.setData({ user, statusView: getVerifyStatusView(user) });
+        const app = getApp();
+        if (app && app.globalData) app.globalData.user = user;
+      })
+      .catch((error) => {
+        const message = error && error.message ? error.message : '\u7528\u6237\u521d\u59cb\u5316\u5931\u8d25';
+        this.setData({ user: null, statusView: getVerifyStatusView(null) });
+        const app = getApp();
+        if (app && app.globalData) app.globalData.user = null;
+        wx.showToast({ title: message, icon: 'none' });
+      });
   },
 
   loadMineTrips() {
@@ -65,5 +89,13 @@ Page({
     const id = event.currentTarget.dataset.id;
     if (!id) return;
     wx.navigateTo({ url: `/pages/detail/detail?id=${id}` });
+  },
+
+  goVerify() {
+    wx.navigateTo({ url: '/pages/verify/verify' });
+  },
+
+  goAdmin() {
+    wx.navigateTo({ url: '/pages/admin/admin' });
   }
 });

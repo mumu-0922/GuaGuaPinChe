@@ -101,3 +101,52 @@
   color: #b91c1c;
   font-weight: 700;
 }
+
+.similar-section {
+  margin-top: 28rpx;
+  padding: 28rpx;
+  border-radius: 30rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.similar-title {
+  color: #0f172a;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.similar-loading {
+  margin-top: 18rpx;
+  color: #64748b;
+  font-size: 26rpx;
+}
+
+.similar-card {
+  margin-top: 18rpx;
+  padding: 22rpx;
+  border-radius: 24rpx;
+  background: #f8fafc;
+}
+
+.similar-card:active {
+  background: #e2e8f0;
+}
+
+.similar-route {
+  color: #0f172a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.similar-meta {
+  margin-top: 10rpx;
+  color: #475569;
+  font-size: 25rpx;
+}
+
+.similar-owner {
+  margin-top: 10rpx;
+  color: #15803d;
+  font-size: 24rpx;
+}

@@ -42,6 +42,19 @@
           "order": "asc"
         }
       ]
+    },
+    {
+      "name": "ownerOpenid_status",
+      "fields": [
+        {
+          "field": "ownerOpenid",
+          "order": "asc"
+        },
+        {
+          "field": "status",
+          "order": "asc"
+        }
+      ]
     }
   ],
   "reports": [
@@ -69,6 +82,79 @@
         },
         {
           "field": "createdAt",
+          "order": "desc"
+        }
+      ]
+    }
+  ],
+  "verificationRequests": [
+    {
+      "name": "status_createdAt",
+      "fields": [
+        {
+          "field": "status",
+          "order": "asc"
+        },
+        {
+          "field": "createdAt",
+          "order": "desc"
+        }
+      ]
+    },
+    {
+      "name": "userOpenid_status",
+      "fields": [
+        {
+          "field": "userOpenid",
+          "order": "asc"
+        },
+        {
+          "field": "status",
+          "order": "asc"
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "name": "verifyStatus_updatedAt",
+      "fields": [
+        {
+          "field": "verifyStatus",
+          "order": "asc"
+        },
+        {
+          "field": "updatedAt",
+          "order": "desc"
+        }
+      ]
+    },
+    {
+      "name": "blocked_updatedAt",
+      "fields": [
+        {
+          "field": "blocked",
+          "order": "asc"
+        },
+        {
+          "field": "updatedAt",
+          "order": "desc"
+        }
+      ]
+    },
+    {
+      "name": "verifyStatus_blocked_updatedAt",
+      "fields": [
+        {
+          "field": "verifyStatus",
+          "order": "asc"
+        },
+        {
+          "field": "blocked",
+          "order": "asc"
+        },
+        {
+          "field": "updatedAt",
           "order": "desc"
         }
       ]

@@ -1,0 +1,85 @@
+.admin-page {
+  padding-bottom: 56rpx;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.admin-tab {
+  flex: 1;
+  border-radius: 999rpx;
+  background: #e8f1ff;
+  color: #004ea2;
+  font-weight: 800;
+  font-size: 28rpx;
+}
+
+.admin-tab--active {
+  background: #004ea2;
+  color: #ffffff;
+}
+
+.admin-error,
+.admin-loading,
+.admin-empty {
+  margin: 20rpx 0;
+  padding: 24rpx;
+  border-radius: 24rpx;
+  background: #ffffff;
+  color: #64748b;
+  text-align: center;
+}
+
+.admin-error {
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.admin-card {
+  margin-bottom: 20rpx;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.admin-card__title {
+  color: #0f172a;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.admin-card__meta {
+  margin-top: 12rpx;
+  color: #64748b;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.admin-action {
+  margin: 0;
+  border-radius: 18rpx;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 26rpx;
+}
+
+.admin-action--primary {
+  background: #004ea2;
+  color: #ffffff;
+}
+
+.admin-action--danger {
+  background: #dc2626;
+  color: #ffffff;
+}

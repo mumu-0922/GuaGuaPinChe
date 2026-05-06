@@ -4,7 +4,9 @@
     "pages/publish/publish",
     "pages/detail/detail",
     "pages/mine/mine",
-    "pages/report/report"
+    "pages/report/report",
+    "pages/verify/verify",
+    "pages/admin/admin"
   ],
   "window": {
     "navigationBarTitleText": "瓜瓜拼车",
@@ -17,9 +19,18 @@
     "selectedColor": "#004EA2",
     "backgroundColor": "#FFFFFF",
     "list": [
-      { "pagePath": "pages/index/index", "text": "广场" },
-      { "pagePath": "pages/publish/publish", "text": "发布" },
-      { "pagePath": "pages/mine/mine", "text": "我的" }
+      {
+        "pagePath": "pages/index/index",
+        "text": "广场"
+      },
+      {
+        "pagePath": "pages/publish/publish",
+        "text": "发布"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
     ]
   }
 }
