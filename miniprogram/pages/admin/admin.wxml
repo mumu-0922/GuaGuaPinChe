@@ -1,6 +1,49 @@
-<view class="safe-area admin-placeholder">
-  <view class="admin-placeholder__card">
-    <view class="admin-placeholder__title">管理员功能开发中</view>
-    <view class="admin-placeholder__desc">下一步将支持认证审核、举报处理、用户管理。</view>
+<view class="safe-area admin-page">
+  <view class="admin-tabs">
+    <button class="admin-tab {{activeTab === 'verify' ? 'admin-tab--active' : ''}}" data-tab="verify" bindtap="switchTab">认证审核</button>
+    <button class="admin-tab {{activeTab === 'reports' ? 'admin-tab--active' : ''}}" data-tab="reports" bindtap="switchTab">举报处理</button>
+    <button class="admin-tab {{activeTab === 'users' ? 'admin-tab--active' : ''}}" data-tab="users" bindtap="switchTab">用户管理</button>
+  </view>
+
+  <view wx:if="{{error}}" class="admin-error">{{error}}</view>
+  <view wx:if="{{loading}}" class="admin-loading">加载中...</view>
+
+  <view wx:if="{{activeTab === 'verify'}}" class="admin-list">
+    <view wx:if="{{!loading && verifyRequests.length === 0}}" class="admin-empty">暂无认证申请</view>
+    <view wx:for="{{verifyRequests}}" wx:key="_id" class="admin-card">
+      <view class="admin-card__title">{{item.title}}</view>
+      <view class="admin-card__meta">备注：{{item.note || '无'}}</view>
+      <view class="admin-actions">
+        <button class="admin-action admin-action--primary" data-id="{{item._id}}" data-action="approve" bindtap="reviewVerify">通过</button>
+        <button class="admin-action admin-action--danger" data-id="{{item._id}}" data-action="reject" bindtap="reviewVerify">拒绝</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{activeTab === 'reports'}}" class="admin-list">
+    <view wx:if="{{!loading && reports.length === 0}}" class="admin-empty">暂无举报</view>
+    <view wx:for="{{reports}}" wx:key="_id" class="admin-card">
+      <view class="admin-card__title">举报 {{item.tripId || item._id}}</view>
+      <view class="admin-card__meta">状态：{{item.statusLabel}} · 原因：{{item.reason || '未填写'}}</view>
+      <view class="admin-card__meta">详情：{{item.detail || '无'}}</view>
+      <view class="admin-actions">
+        <button class="admin-action admin-action--primary" data-id="{{item._id}}" data-status="reviewed" data-hide-trip="{{false}}" bindtap="resolveReport">标记已处理</button>
+        <button class="admin-action admin-action--danger" data-id="{{item._id}}" data-status="reviewed" data-hide-trip="{{true}}" bindtap="resolveReport">隐藏行程</button>
+        <button class="admin-action" data-id="{{item._id}}" data-status="rejected" data-hide-trip="{{false}}" bindtap="resolveReport">驳回</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{activeTab === 'users'}}" class="admin-list">
+    <view wx:if="{{!loading && users.length === 0}}" class="admin-empty">暂无用户</view>
+    <view wx:for="{{users}}" wx:key="_id" class="admin-card">
+      <view class="admin-card__title">{{item.title}}</view>
+      <view class="admin-card__meta">认证：{{item.verifyText}}</view>
+      <view class="admin-card__meta">状态：{{item.blockText}}</view>
+      <view class="admin-actions">
+        <button wx:if="{{!item.blocked}}" class="admin-action admin-action--danger" data-id="{{item._id}}" data-openid="{{item._id}}" data-action="block" bindtap="blockUser">拉黑</button>
+        <button wx:else class="admin-action admin-action--primary" data-id="{{item._id}}" data-openid="{{item._id}}" data-action="unblock" bindtap="blockUser">解除拉黑</button>
+      </view>
+    </view>
   </view>
 </view>
