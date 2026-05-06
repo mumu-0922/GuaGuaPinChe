@@ -1,8 +1,95 @@
 import { createRequire } from 'node:module';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const require = createRequire(import.meta.url);
 const { buildDefaultDraft, buildTripDraftFromForm, combineDateTime, setDraftField } = require('../../miniprogram/pages/publish/form.js');
+const publishPagePath = require.resolve('../../miniprogram/pages/publish/publish.js');
+
+const validDraft = {
+  from: '长安校区',
+  to: '咸阳机场',
+  date: '2026-04-30',
+  earliestClock: '09:15',
+  latestClock: '10:45',
+  peopleCount: 3,
+  contactType: 'wechat',
+  contactValue: 'wxid_123',
+  note: '一人一箱'
+};
+
+function applyData(target, patch) {
+  Object.entries(patch).forEach(([key, value]) => {
+    if (!key.includes('.')) {
+      target[key] = value;
+      return;
+    }
+    const parts = key.split('.');
+    let cursor = target;
+    parts.slice(0, -1).forEach((part) => {
+      cursor[part] = cursor[part] || {};
+      cursor = cursor[part];
+    });
+    cursor[parts[parts.length - 1]] = value;
+  });
+}
+
+function createPageInstance(config) {
+  return {
+    ...config,
+    data: JSON.parse(JSON.stringify(config.data)),
+    setData(update) {
+      applyData(this.data, update);
+    }
+  };
+}
+
+function loadPublishPage({ results = [] } = {}) {
+  delete require.cache[publishPagePath];
+  let pageConfig = null;
+  const app = { globalData: {} };
+  const calls = [];
+  const wx = {
+    showToast: vi.fn(),
+    showModal: vi.fn(),
+    switchTab: vi.fn(),
+    cloud: {
+      callFunction: vi.fn(({ name, data }) => {
+        calls.push({ name, data });
+        const result = typeof results[0] === 'function' ? results.shift()({ name, data }) : results.shift();
+        if (result instanceof Error) return Promise.reject(result);
+        return Promise.resolve({ result: result || { ok: true } });
+      })
+    }
+  };
+
+  globalThis.wx = wx;
+  globalThis.getApp = () => app;
+  globalThis.Page = (config) => {
+    pageConfig = config;
+  };
+  vi.stubGlobal('setTimeout', vi.fn((callback) => {
+    callback();
+    return 1;
+  }));
+
+  require(publishPagePath);
+  return { page: createPageInstance(pageConfig), wx, app, calls };
+}
+
+async function flushPromises() {
+  await Promise.resolve();
+  await Promise.resolve();
+  await Promise.resolve();
+  await Promise.resolve();
+}
+
+afterEach(() => {
+  delete require.cache[publishPagePath];
+  delete globalThis.wx;
+  delete globalThis.getApp;
+  delete globalThis.Page;
+  vi.unstubAllGlobals();
+});
 
 describe('publish form helpers', () => {
   it('builds a default draft with contact type and people count', () => {
@@ -52,5 +139,50 @@ describe('publish form helpers', () => {
     const next = setDraftField(draft, 'from', '\u53cb\u8c0a\u6821\u533a');
     expect(next.from).toBe('\u53cb\u8c0a\u6821\u533a');
     expect(draft.from).toBe('');
+  });
+});
+
+describe('publish page flow', () => {
+  it('checks similar trips by created trip id and shows count modal', async () => {
+    const similarTrip = { _id: 'near-trip' };
+    const { page, wx, calls } = loadPublishPage({
+      results: [
+        { ok: true },
+        { ok: true, tripId: 'new-trip' },
+        { ok: true, trips: [similarTrip] }
+      ]
+    });
+    page.data.draft = { ...validDraft };
+
+    page.submitTrip();
+    await flushPromises();
+    await vi.waitFor(() => expect(wx.showModal).toHaveBeenCalled());
+
+    expect(calls[2]).toEqual({ name: 'tripSimilar', data: { tripId: 'new-trip' } });
+    expect(calls[2].data).not.toHaveProperty('trip');
+    expect(wx.showModal).toHaveBeenCalledWith(expect.objectContaining({
+      title: '发布成功',
+      content: '发现 1 个相似行程，可以去看看',
+      showCancel: false
+    }));
+  });
+
+  it('keeps publish success when tripSimilar rejects', async () => {
+    const { page, wx, calls } = loadPublishPage({
+      results: [
+        { ok: true },
+        { ok: true, tripId: 'new-trip' },
+        new Error('similar failed')
+      ]
+    });
+    page.data.draft = { ...validDraft };
+
+    page.submitTrip();
+    await flushPromises();
+    await vi.waitFor(() => expect(wx.showToast).toHaveBeenCalledWith({ title: '已发布', icon: 'success' }));
+
+    expect(calls.map((call) => call.name)).toEqual(['userEnsure', 'tripCreate', 'tripSimilar']);
+    expect(wx.switchTab).toHaveBeenCalledWith({ url: '/pages/index/index' });
+    expect(wx.showToast).not.toHaveBeenCalledWith({ title: '发布失败', icon: 'none' });
   });
 });

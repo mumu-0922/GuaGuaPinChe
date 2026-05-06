@@ -110,10 +110,24 @@ Page({
         if (!createResult || createResult.ok === false) {
           throw new Error((createResult && createResult.errors && createResult.errors[0]) || '\u53d1\u5e03\u5931\u8d25');
         }
+        const similarPayload = createResult.tripId ? { tripId: createResult.tripId } : { trip };
+        return callFunction('tripSimilar', similarPayload).catch(() => null);
+      })
+      .then((similarResult) => {
         const app = getApp();
         if (app && app.globalData) app.globalData.shouldRefreshTrips = true;
-        wx.showToast({ title: '\u5df2\u53d1\u5e03', icon: 'success' });
+        const count = similarResult && similarResult.ok !== false && Array.isArray(similarResult.trips) ? similarResult.trips.length : 0;
         this.resetDraft();
+        if (count > 0) {
+          wx.showModal({
+            title: '\u53d1\u5e03\u6210\u529f',
+            content: `\u53d1\u73b0 ${count} \u4e2a\u76f8\u4f3c\u884c\u7a0b\uff0c\u53ef\u4ee5\u53bb\u770b\u770b`,
+            showCancel: false,
+            complete: () => wx.switchTab({ url: '/pages/index/index' })
+          });
+          return;
+        }
+        wx.showToast({ title: '\u5df2\u53d1\u5e03', icon: 'success' });
         setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 500);
       })
       .catch((error) => {

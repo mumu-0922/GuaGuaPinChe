@@ -9,6 +9,8 @@ Page({
     contactText: '',
     loading: false,
     revealing: false,
+    similarTrips: [],
+    similarLoading: false,
     error: ''
   },
 
@@ -21,13 +23,14 @@ Page({
 
   loadDetail(tripId = this.data.tripId) {
     if (!tripId) return Promise.resolve();
-    this.setData({ loading: true, error: '', contactText: '' });
+    this.setData({ loading: true, error: '', contactText: '', similarTrips: [] });
     return callFunction('tripDetail', { tripId })
       .then((result) => {
         if (!result || result.ok === false) {
           throw new Error((result && result.errors && result.errors[0]) || '\u52a0\u8f7d\u5931\u8d25');
         }
         this.setData({ trip: result.trip, tripView: formatTripView(result.trip), error: '' });
+        this.loadSimilarTrips(tripId);
       })
       .catch((error) => {
         const message = error && error.message ? error.message : '\u52a0\u8f7d\u5931\u8d25';
@@ -37,6 +40,32 @@ Page({
       .finally(() => {
         this.setData({ loading: false });
       });
+  },
+
+  loadSimilarTrips(tripId = this.data.tripId) {
+    if (!tripId) return Promise.resolve();
+    this.setData({ similarLoading: true });
+    return callFunction('tripSimilar', { tripId })
+      .then((result) => {
+        if (!result || result.ok === false) return;
+        const similarTrips = (result.trips || []).slice(0, 3).map((trip) => ({
+          ...trip,
+          view: formatTripView(trip)
+        }));
+        this.setData({ similarTrips });
+      })
+      .catch(() => {
+        this.setData({ similarTrips: [] });
+      })
+      .finally(() => {
+        this.setData({ similarLoading: false });
+      });
+  },
+
+  openSimilarTrip(event) {
+    const id = event.currentTarget.dataset.id;
+    if (!id) return;
+    wx.navigateTo({ url: `/pages/detail/detail?id=${id}` });
   },
 
   revealContact() {
