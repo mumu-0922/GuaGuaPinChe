@@ -51,6 +51,7 @@ function loadPublishPage({ results = [] } = {}) {
   const wx = {
     showToast: vi.fn(),
     showModal: vi.fn(),
+    navigateTo: vi.fn(),
     switchTab: vi.fn(),
     cloud: {
       callFunction: vi.fn(({ name, data }) => {
@@ -147,7 +148,7 @@ describe('publish page flow', () => {
     const similarTrip = { _id: 'near-trip' };
     const { page, wx, calls } = loadPublishPage({
       results: [
-        { ok: true },
+        { ok: true, user: { verifyStatus: 'verified' } },
         { ok: true, tripId: 'new-trip' },
         { ok: true, trips: [similarTrip] }
       ]
@@ -170,7 +171,7 @@ describe('publish page flow', () => {
   it('keeps publish success when tripSimilar rejects', async () => {
     const { page, wx, calls } = loadPublishPage({
       results: [
-        { ok: true },
+        { ok: true, user: { verifyStatus: 'verified' } },
         { ok: true, tripId: 'new-trip' },
         new Error('similar failed')
       ]
@@ -184,5 +185,73 @@ describe('publish page flow', () => {
     expect(calls.map((call) => call.name)).toEqual(['userEnsure', 'tripCreate', 'tripSimilar']);
     expect(wx.switchTab).toHaveBeenCalledWith({ url: '/pages/index/index' });
     expect(wx.showToast).not.toHaveBeenCalledWith({ title: '发布失败', icon: 'none' });
+  });
+
+  it('prompts pending users to verify before creating a trip', async () => {
+    const { page, wx, calls } = loadPublishPage({
+      results: [
+        { ok: true, user: { verifyStatus: 'pending' } }
+      ]
+    });
+    page.data.draft = { ...validDraft };
+
+    page.submitTrip();
+    await flushPromises();
+    await vi.waitFor(() => expect(wx.showModal).toHaveBeenCalled());
+
+    expect(calls.map((call) => call.name)).toEqual(['userEnsure']);
+    expect(wx.showModal).toHaveBeenCalledWith(expect.objectContaining({
+      title: '需要校园认证',
+      content: '认证审核中，通过后可发布行程',
+      confirmText: '去认证'
+    }));
+    expect(page.data.submitting).toBe(false);
+
+    wx.showModal.mock.calls[0][0].success({ confirm: true });
+    expect(wx.navigateTo).toHaveBeenCalledWith({ url: '/pages/verify/verify' });
+  });
+
+  it('prompts blocked users without navigating to verify or creating a trip', async () => {
+    const { page, wx, calls } = loadPublishPage({
+      results: [
+        { ok: true, user: { verifyStatus: 'verified', blocked: true, blockedReason: '\u8fdd\u89c4\u53d1\u5e03' } }
+      ]
+    });
+    page.data.draft = { ...validDraft };
+
+    page.submitTrip();
+    await flushPromises();
+    await vi.waitFor(() => expect(wx.showModal).toHaveBeenCalled());
+
+    expect(calls.map((call) => call.name)).toEqual(['userEnsure']);
+    expect(wx.showModal).toHaveBeenCalledWith(expect.objectContaining({
+      title: '\u8d26\u53f7\u5df2\u88ab\u9650\u5236',
+      content: '\u8d26\u53f7\u5df2\u88ab\u9650\u5236\uff0c\u4e0d\u80fd\u53d1\u5e03\u884c\u7a0b\uff1a\u8fdd\u89c4\u53d1\u5e03',
+      showCancel: false
+    }));
+    expect(wx.showModal.mock.calls[0][0]).not.toHaveProperty('confirmText', '\u53bb\u8ba4\u8bc1');
+    expect(page.data.submitting).toBe(false);
+
+    wx.showModal.mock.calls[0][0].success?.({ confirm: true });
+    expect(wx.navigateTo).not.toHaveBeenCalled();
+  });
+
+  it('allows legacy verified users without verifyStatus to create a trip', async () => {
+    const { page, wx, calls } = loadPublishPage({
+      results: [
+        { ok: true, user: { verified: true } },
+        { ok: true, tripId: 'legacy-trip' },
+        { ok: true, trips: [] }
+      ]
+    });
+    page.data.draft = { ...validDraft };
+
+    page.submitTrip();
+    await flushPromises();
+    await vi.waitFor(() => expect(wx.showToast).toHaveBeenCalledWith({ title: '\u5df2\u53d1\u5e03', icon: 'success' }));
+
+    expect(calls.map((call) => call.name)).toEqual(['userEnsure', 'tripCreate', 'tripSimilar']);
+    expect(calls[1].data).toHaveProperty('trip');
+    expect(calls[2]).toEqual({ name: 'tripSimilar', data: { tripId: 'legacy-trip' } });
   });
 });
